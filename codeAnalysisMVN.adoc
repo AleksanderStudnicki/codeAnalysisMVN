@@ -1,0 +1,99 @@
+# Maven - statyczna analiza kodu
+
+#### Statyczna analiza kodu to analiza źródeł projektu bez jego uruchamiania za pomocą odpowiednich narzędzi. Umożliwia nam to wykrycie potencjalnych błędów na bardzo wczesnym etapie życia projektu, co minimalizuje koszty ich naprawy. Poza tym dbamy m.in. również o dobre praktyki w naszym kodzie podążając za wskazówkami, które są generowane przez te narzędzia.
+
+#### W Mavenie posiadamy wiele wtyczek, które realizują dla nas statyczną analizę kodu. Z najważniejszych możemy wymienić:
+
+- Checkstyle
+- PMD
+- JDepend
+
+
+## Przygotowanie pom.xml
+
+By móc rozpocząć przygodę ze statyczną analizą kodu musimy zaopatrzyć się we wtyczkę maven-site-plugin oraz maven-project-info-reports-plugin. Będą nam one generowały raport w postaci stron html. Posiadając te wtyczki dużo łatwiej będzie nam nawigować np. po raportach checkstyle, niż gdybyśmy je tworzyli za pomocą mvn checkstyle:checkstyle. Wtyczki, które będziemy umieszczali w naszych pomach muszą znaleźć się w sekcji reporting (ten sam poziom co build.)
+
+    <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>3.7.1</version>
+        </plugin>
+    <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>3.0.0</version>
+    </plugin>
+
+  <reporting>
+    <plugins>
+    </plugins>
+  </reporting>
+
+## Checkstyle
+
+Jest to narzędzie, które sprawdza kod pod kątem poprawności względem konfigurowalnego wzorca. Checkstyle może zostać uruchomiony z poziomu terminala za pomocą komendy `mvn checkstyle:checkstyle` jak i po dodaniu do pomu w sekcji reporting. Wtedy też raporty będą nam się generowały po uruchomieniu `mvn site` i będą widoczne w folderze targer/site.
+
+Rodzaje celów (goal) checkstyle:
+
+- checkstyle
+- check
+- checkstyle-aggregate
+
+    <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>3.1.0</version>
+        <reportSets>
+            <reportSet>
+                <reports>
+                 <report>checkstyle</report>
+                </reports>
+            </reportSet>
+        </reportSets>
+    </plugin>
+
+== PMD
+
+https://pmd.github.io/pmd-6.20.0/
+
+PMD sprawdza kod pod kątem nieużywanych obiektów, puste bloki, itp. Podobnie jak checkstyle, możemy go uruchomić bezpośrednio z konsoli `mvn pmd:pmd` jak i możemy go dodać do pom.xml.
+
+Rozróżniamy cztery cele wtyczki:
+
+- pmd
+- cpd
+- check
+- cpd-check
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>3.12.0</version>
+        <configuration>
+          <sourceEncoding>utf-8</sourceEncoding>
+          <minimumTokens>100</minimumTokens>
+          <targetJdk>11</targetJdk>
+          <excludes>
+            <exclude>**/*Bean.java</exclude>
+            <exclude>**/generated/*.java</exclude>
+          </excludes>
+          <excludeRoots>
+            <excludeRoot>target/generated-sources/stubs</excludeRoot>
+          </excludeRoots>
+        </configuration>
+      </plugin>
+
+== JDepend
+
+Ta wtyczka ocenia kod pod kątem projektu. Sprawdza jego rozszerzalność, reużywalność oraz możliwości jego konserwacji.
+
+    <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>jdepend-maven-plugin</artifactId>
+        <version>2.0</version>
+    </plugin>
+
+== Ćwiczenia
+
+Użyjcie każdego z opisanych narzędzi, na którymś z Waszych projektów i spradźcie zawartość raportów.
+
