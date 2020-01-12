@@ -114,6 +114,10 @@ Ta wtyczka ocenia kod pod kątem projektu. Sprawdza jego rozszerzalność, reuż
         <version>2.0</version>
     </plugin>
 
+== Sonar
+
+Największe ze wszystkich narzędzi. W dużej mierze pokrywa funkcjonalności wcześniej wspomnianych. Wymaga jednak uruchomienia jako aplikacja serwerowa, a dopiero następnie uruchomienia dedykowanej komendy z poziomu mavena. Nie oferuje również wszystkich swoich funkcjonalności w wersji community. Opis instalacji i uruchomienia został ujęty w innym warsztacie.
+
 == Ćwiczenia
 
 Użyjcie każdego z opisanych narzędzi, na którymś z Waszych projektów i spradźcie zawartość raportów.
