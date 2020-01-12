@@ -11,7 +11,7 @@
 
 ## Przygotowanie pom.xml
 
-By móc rozpocząć przygodę ze statyczną analizą kodu musimy zaopatrzyć się we wtyczkę maven-site-plugin oraz maven-project-info-reports-plugin. Będą nam one generowały raport w postaci stron html. Posiadając te wtyczki dużo łatwiej będzie nam nawigować np. po raportach checkstyle, niż gdybyśmy je tworzyli za pomocą mvn checkstyle:checkstyle. Wtyczki, które będziemy umieszczali w naszych pomach muszą znaleźć się w sekcji reporting (ten sam poziom co build.)
+By móc rozpocząć przygodę ze statyczną analizą kodu musimy zaopatrzyć się we wtyczkę maven-site-plugin oraz maven-project-info-reports-plugin. Będą nam one generowały raport w postaci stron html. Posiadając te wtyczki dużo łatwiej będzie nam nawigować np. po raportach checkstyle, niż gdybyśmy je tworzyli za pomocą mvn checkstyle:checkstyle. Wtyczki, które będziemy umieszczali w naszych pomach muszą znaleźć się w sekcji reporting (ten sam poziom co build.). Na początku dodajmy jedną wtyczkę jxr. Pozwoli nam ona linkować bezpośrednio do linii kodu z poziomu raportów generowanych przez np. checkstyle czy pmd.
 
     <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -26,12 +26,17 @@ By móc rozpocząć przygodę ze statyczną analizą kodu musimy zaopatrzyć si�
 
   <reporting>
     <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jxr-plugin</artifactId>
+            <version>${version.plugin.maven.jxr}</version>
+        </plugin>
     </plugins>
   </reporting>
 
 ## Checkstyle
 
-Jest to narzędzie, które sprawdza kod pod kątem poprawności względem konfigurowalnego wzorca. Checkstyle może zostać uruchomiony z poziomu terminala za pomocą komendy `mvn checkstyle:checkstyle` jak i po dodaniu do pomu w sekcji reporting. Wtedy też raporty będą nam się generowały po uruchomieniu `mvn site` i będą widoczne w folderze targer/site.
+Jest to narzędzie, które sprawdza kod pod kątem poprawności względem konfigurowalnego wzorca (najlepiej od razu ustawić zestaw reguł na google checks, gdyż domyślny sun jest zbyt restrykcyjny). Checkstyle może zostać uruchomiony z poziomu terminala za pomocą komendy `mvn checkstyle:checkstyle` jak i po dodaniu do pomu w sekcji reporting. Wtedy też raporty będą nam się generowały po uruchomieniu `mvn site` i będą widoczne w folderze target/site.
 
 Rodzaje celów (goal) checkstyle:
 
@@ -39,19 +44,17 @@ Rodzaje celów (goal) checkstyle:
 - check
 - checkstyle-aggregate
 
-    <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>3.1.0</version>
-        <reportSets>
-            <reportSet>
-                <reports>
-                 <report>checkstyle</report>
-                </reports>
-            </reportSet>
-        </reportSets>
-    </plugin>
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${version.plugin.maven.checkstyle}</version>
+                <configuration>
+                    <configLocation>google_checks.xml</configLocation>
+                    <failOnViolation>false</failOnViolation>
+                    <enableFilesSummary>false</enableFilesSummary>
+                </configuration>
+            </plugin>
+            
 == PMD
 
 https://pmd.github.io/pmd-6.20.0/
